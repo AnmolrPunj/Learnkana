@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnKana</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" href="/favicon_io/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png">
+</head>
+<body>
+    <nav id="navbar">
+        <div id="nav-logo">
+            <a href="/"><div id="logo-icon">あ</div></a>
+        </div>
+        <ul id="nav-tabs">
+            <li><a class="tab active" href="/">Hiragana</a></li>
+            <li><a class="tab" href="/katakana">Katakana</a></li>
+            <li><a class="tab" href="/study">Study</a></li>
+        </ul>
+        <ul id="nav-right">
+            <li><a class="tab" href="/about">About</a></li>
+            <li><a class="tab" href="/contact">Contact</a></li>
+        </ul>
+    </nav>
+    <div id="content">
+        <div id="grid-panel">
+            <div id="grid-header">
+                <h2 id="grid-title">Hiragana</h2>
+                <p id="grid-instructions">Select a <span>column</span> to study, then head to <a class="inline-link" href="/study">Study</a></p>
+            </div>
+            <div id="kana-grid-container">
+                <div id="kana-grid"></div>
+            </div>
+        </div>
+    </div>
+    <script src="/index.js"></script>
+</body>
+</html>
