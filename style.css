@@ -414,6 +414,15 @@ body {
     width: 100%;
 }
 
+#scroll-hint {
+    display: none;
+    color: var(--text-dim);
+    font-size: 11px;
+    text-align: center;
+    margin: 8px 0 0;
+    letter-spacing: 0.03em;
+}    
+
 @media (max-width: 600px) {
     #kana-grid {
         flex-wrap: wrap;
@@ -422,5 +431,67 @@ body {
 
     .kana-col {
         width: clamp(44px, 18vw, 56px);
+    }
+}
+
+@media (max-width: 768px) {
+    #content {
+        padding: 16px;
+    }
+
+    #grid-panel {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 12px;
+        overflow: hidden;
+    }
+
+    #kana-grid-container {
+        overflow-x: auto;
+        width: 100%;
+    }
+
+    #kana-grid {
+        flex-wrap: nowrap;
+        width: max-content;
+    }
+
+    .kana-col {
+        width: 48px;
+    }
+
+    .kana-cell {
+        height: 48px;
+    }
+
+    .kana {
+        font-size: 18px;
+    }
+
+    .romaji {
+        font-size: 8px;
+    }
+
+    #study-kana {
+        font-size: 72px;
+    }
+
+    #study-tracker {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+    }
+
+    #kana-grid-container {
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    #kana-grid-container::-webkit-scrollbar {
+        display: none;
+    }
+
+    #scroll-hint {
+        display: block;
     }
 }
