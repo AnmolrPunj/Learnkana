@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="content-language" content="en">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact | Kana Learner</title>
     <meta name="description" content="Get in touch with feedback, bug reports, or suggestions for Kana Learner.">
@@ -30,15 +31,14 @@
                 <h2 id="grid-title">Contact</h2>
                 <p id="grid-instructions">Have a suggestion, found a bug, or just want to say hi feel free to reach out.</p>
             </div>
-            <iframe name="dummyframe" id="dummyframe" style="display:none;"></iframe>
-            <form id="contact-form" action="https://api.web3forms.com/submit" method="POST" target="dummyframe">
+            <form id="contact-form">
                 <input type="hidden" name="access_key" value="c6723e3d-44a1-4f39-9353-c547a7255540">
                 <input type="checkbox" name="botcheck" style="display:none;">
                 <div class="form-group">
                     <input type="text" name="name" placeholder="Name" required>
                 </div>
                 <div class="form-group">
-                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="email" name="email" placeholder="Email (optional)">
                 </div>
                 <div class="form-group">
                     <textarea name="message" placeholder="Message" rows="4" required></textarea>
@@ -50,13 +50,24 @@
     </div>
     <script src="/index.js"></script>
     <script>
-        document.getElementById('contact-form').addEventListener('submit', function() {
-            setTimeout(() => {
-                document.getElementById('contact-form').style.display = 'none';
-                document.getElementById('grid-instructions').style.display = 'none';
-                document.getElementById('grid-title').textContent = 'Sent';
-                document.getElementById('form-success').style.display = 'block';
-            }, 1000);
+        document.getElementById('contact-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const btn = document.querySelector('#contact-form button');
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+            
+            const formData = new FormData(this);
+            
+            await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: formData
+            });
+            
+            document.getElementById('contact-form').style.display = 'none';
+            document.getElementById('grid-instructions').style.display = 'none';
+            document.getElementById('grid-title').textContent = 'Message Sent';
+            document.getElementById('form-success').style.display = 'block';
         });
     </script>
 </body>
