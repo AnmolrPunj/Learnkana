@@ -1,6 +1,26 @@
 const selectedKana = new Set();
 let usedDefault = false;
 
+// --- Persistence helpers ---
+const STORAGE_KEY = 'kana_selection';
+
+function saveSelection() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify([...selectedKana]));
+    } catch (e) {}
+}
+
+function loadSelection() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            JSON.parse(saved).forEach(k => selectedKana.add(k));
+        }
+    } catch (e) {}
+}
+
+loadSelection();
+
 const hiraganaColumns = [
     { kana: ['あ','い','う','え','お'], romaji: ['a','i','u','e','o'] },
     { kana: ['か','き','く','け','こ'], romaji: ['ka','ki','ku','ke','ko'] },
@@ -64,10 +84,26 @@ async function loadPage(url) {
 
 window.addEventListener('popstate', () => loadPage(window.location.pathname));
 
+function setColSelected(colEl, key, selected) {
+    if (selected) {
+        selectedKana.add(key);
+        colEl.classList.add('selected');
+    } else {
+        selectedKana.delete(key);
+        colEl.classList.remove('selected');
+    }
+    usedDefault = false;
+    saveSelection();
+}
+
 function renderGrid(columns) {
     const grid = document.getElementById('kana-grid');
     if (!grid) return;
     grid.innerHTML = '';
+
+    // Drag state — scoped to this grid render
+    let isDragging = false;
+    let dragSelectMode = null; // true = selecting, false = deselecting
 
     columns.forEach(col => {
         const colEl = document.createElement('div');
@@ -91,21 +127,60 @@ function renderGrid(columns) {
             colEl.appendChild(cell);
         });
 
-        colEl.addEventListener('click', () => {
-            const key = col.kana.filter(k => k).join('');
-            if (selectedKana.has(key)) {
-                selectedKana.delete(key);
-                colEl.classList.remove('selected');
-                usedDefault = false;
-            } else {
-                selectedKana.add(key);
-                colEl.classList.add('selected');
-                usedDefault = false;
-            }
+        // Mouse drag: start on mousedown, apply on mouseenter while dragging
+        colEl.addEventListener('mousedown', (e) => {
+            e.preventDefault(); // prevent text selection while dragging
+            isDragging = true;
+            // Mode is determined by the opposite of current state
+            dragSelectMode = !selectedKana.has(key);
+            setColSelected(colEl, key, dragSelectMode);
         });
+
+        colEl.addEventListener('mouseenter', () => {
+            if (!isDragging) return;
+            setColSelected(colEl, key, dragSelectMode);
+        });
+
+        // Touch drag support
+        colEl.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            dragSelectMode = !selectedKana.has(key);
+            setColSelected(colEl, key, dragSelectMode);
+        }, { passive: true });
 
         grid.appendChild(colEl);
     });
+
+    // End drag on mouseup anywhere
+    const stopDrag = () => { isDragging = false; dragSelectMode = null; };
+    document.addEventListener('mouseup', stopDrag, { once: false });
+
+    // Touch drag: find element under finger and apply selection
+    grid.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        const touch = e.touches[0];
+        const el = document.elementFromPoint(touch.clientX, touch.clientY);
+        if (!el) return;
+        const colEl = el.closest('.kana-col');
+        if (!colEl) return;
+        // Find the key for this colEl
+        const kanaSpans = colEl.querySelectorAll('.kana');
+        const key = [...kanaSpans].map(s => s.textContent.trim()).filter(t => t && t !== '\u00a0').join('');
+        if (!key) return;
+        if (dragSelectMode && !selectedKana.has(key)) {
+            selectedKana.add(key);
+            colEl.classList.add('selected');
+            usedDefault = false;
+            saveSelection();
+        } else if (!dragSelectMode && selectedKana.has(key)) {
+            selectedKana.delete(key);
+            colEl.classList.remove('selected');
+            usedDefault = false;
+            saveSelection();
+        }
+    }, { passive: true });
+
+    grid.addEventListener('touchend', stopDrag, { passive: true });
 }
 
 function buildQueue() {
@@ -205,6 +280,7 @@ function initStudy() {
             tracker.className = '';
         }, 2500);
     }
+
     input.addEventListener('keydown', e => {
         if (e.key !== 'Enter') return;
         if (waiting) return;
