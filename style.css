@@ -111,6 +111,9 @@ body {
     font-weight: normal;
     color: var(--text);
     letter-spacing: 0.08em;
+    /* Reset h1 browser defaults so it looks identical to the old h2 */
+    padding: 0;
+    line-height: 1.2;
 }
 
 #grid-instructions {
