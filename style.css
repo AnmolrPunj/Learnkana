@@ -518,3 +518,24 @@ body {
         display: block;
     }
 }
+
+
+#seo-description {
+    max-width: 520px;
+    padding: 16px 20px;
+    background: var(--bg-nav);
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+#seo-description p {
+    color: var(--text-dim);
+    font-size: 12px;
+    line-height: 1.8;
+    margin: 0 0 10px;
+    letter-spacing: 0.02em;
+}
+
+#seo-description p:last-child {
+    margin-bottom: 0;
+}

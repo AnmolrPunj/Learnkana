@@ -1,14 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="content-language" content="en">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact | Kana Learner</title>
-    <meta name="description" content="Get in touch with feedback, bug reports, or suggestions for Kana Learner.">
+    <meta name="language" content="en">
+    <meta http-equiv="content-language" content="en">
+
+    <title>Contact — Kana Learner</title>
+    <meta name="description" content="Get in touch with feedback, bug reports, or suggestions for Kana Learner — a free hiragana and katakana study tool.">
+    <meta name="robots" content="index, follow">
+    <meta name="google" content="notranslate">
+
+    <link rel="canonical" href="https://kanalearner.com/contact">
+
+    <meta property="og:site_name" content="Kana Learner">
+    <meta property="og:title" content="Contact — Kana Learner">
+    <meta property="og:url" content="https://kanalearner.com/contact">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+
     <link rel="stylesheet" href="/style.css">
     <link rel="icon" href="/favicon_io/favicon.ico">
-    <meta property="og:site_name" content="Kana Learner">
 </head>
 <body>
     <nav id="navbar">
@@ -28,8 +40,8 @@
     <div id="content">
         <div id="grid-panel" class="contact-panel">
             <div id="grid-header">
-                <h2 id="grid-title">Contact</h2>
-                <p id="grid-instructions">Have a suggestion, found a bug, or just want to say hi feel free to reach out.</p>
+                <h1 id="grid-title">Contact</h1>
+                <p id="grid-instructions">Have a suggestion, found a bug, or just want to say hi? Feel free to reach out.</p>
             </div>
             <form id="contact-form">
                 <input type="hidden" name="access_key" value="c6723e3d-44a1-4f39-9353-c547a7255540">
@@ -56,14 +68,14 @@
             const btn = document.querySelector('#contact-form button');
             btn.disabled = true;
             btn.textContent = 'Sending...';
-            
+
             const formData = new FormData(this);
-            
+
             await fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
                 body: formData
             });
-            
+
             document.getElementById('contact-form').style.display = 'none';
             document.getElementById('grid-instructions').style.display = 'none';
             document.getElementById('grid-title').textContent = 'Message Sent';
